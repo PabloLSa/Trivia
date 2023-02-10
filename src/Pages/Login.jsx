@@ -84,7 +84,6 @@ class Login extends Component {
             type="button"
             data-testid="btn-settings"
             onClick={ () => {
-              // const { history } = this.props;
               history.push('/config');
             } }
           >
