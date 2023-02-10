@@ -4,8 +4,8 @@ export default class Config extends Component {
   render() {
     return (
       <div>
-        <title data-testid="settings-title" ></title>
-        
+        <title data-testid="settings-title" />
+
       </div>
     );
   }
