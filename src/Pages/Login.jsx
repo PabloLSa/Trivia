@@ -27,6 +27,18 @@ class Login extends Component {
     }, () => this.validation());
   };
 
+  getToken = async () => {
+    const token = await fetch('https://opentdb.com/api_token.php?command=request');
+    const theToken = await token.json();
+    this.saveInLocalStorage(theToken.token);
+    console.log(theToken);
+    return theToken.token;
+  };
+
+  saveInLocalStorage = (value) => {
+    localStorage.setItem('token', value);
+  };
+
   render() {
     const { email, name, isDisable } = this.state;
     const { dispatch, history } = this.props;
@@ -61,10 +73,22 @@ class Login extends Component {
               e.preventDefault();
               dispatch(addEmail(email));
               dispatch(addName(name));
+              this.getToken();
               history.push('/game');
             } }
           >
             Play
+
+          </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ () => {
+              // const { history } = this.props;
+              history.push('/config');
+            } }
+          >
+            Configurações
 
           </button>
         </form>

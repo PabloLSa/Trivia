@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
-export default class Game extends Component {
+class Config extends Component {
   render() {
     return (
       <title data-testid="settings-title">Settings</title>
     );
   }
 }
+
+export default Config;
