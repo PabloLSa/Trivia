@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import Header from '../components/Header';
 
 export default class Game extends Component {
   render() {
     return (
-      <title data-testid="settings-title">Settings</title>
+      <div>
+        <Header />
+      </div>
     );
   }
 }
