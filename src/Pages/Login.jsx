@@ -29,11 +29,14 @@ class Login extends Component {
 
   getToken = async () => {
     const token = await fetch('https://opentdb.com/api_token.php?command=request');
-    const theToken = token.json();
-    // const value =  theToken.token;
-    localStorage.setItem('token', theToken.token);
+    const theToken = await token.json();
+    this.saveInLocalStorage(theToken.token);
     console.log(theToken);
     return theToken.token;
+  };
+
+  saveInLocalStorage = (value) => {
+    localStorage.setItem('token', value);
   };
 
   render() {
@@ -78,8 +81,12 @@ class Login extends Component {
 
           </button>
           <button
+            type="button"
             data-testid="btn-settings"
-            onClick={ history.push('/config') }
+            onClick={ () => {
+              // const { history } = this.props;
+              history.push('/config');
+            } }
           >
             Configurações
 
