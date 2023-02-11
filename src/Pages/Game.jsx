@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import '../App.css';
+import '../styles/game.css';
 
 const INITIAL_STATE = {
   questions: [],
@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   questionId: 0,
   category: [],
   responseAPI: false,
+  color: '',
 };
 
 export default class Game extends Component {
@@ -43,6 +44,35 @@ export default class Game extends Component {
     });
   };
 
+  changeColor = (e) => {
+    const { target } = e;
+    const { correctAnswer } = this.state;
+    const { id, innerHTML } = target;
+    if (innerHTML === correctAnswer[id]) {
+      e.currentTarget.classList.add('green');
+      this.setState({ color: 'green' });
+    } else {
+      e.currentTarget.classList.add('red');
+      this.setState({ color: 'red' });
+    }
+  };
+
+  teste = (boolean) => {
+    const { color } = this.state;
+    if (color === 'green' && boolean) {
+      return 'green';
+    }
+    if (color === 'green' && !boolean) {
+      return 'red';
+    }
+    if (color === 'red' && boolean) {
+      return 'green';
+    }
+    if (color === 'red' && !boolean) {
+      return 'red';
+    }
+  };
+
   render() {
     const {
       questions,
@@ -71,9 +101,12 @@ export default class Game extends Component {
                           ? 'correct-answer'
                           : `wrong-answer-${index - 1}`
                       }
-                      className={ question === correctAnswer[questionId]
-                        ? 'green'
-                        : 'white' }
+                      id={ questionId }
+                      className={ this.teste(question === correctAnswer[questionId]) }
+                      onClick={ (e) => {
+                        e.preventDefault();
+                        this.changeColor(e);
+                      } }
                     >
                       {question}
                     </button>
