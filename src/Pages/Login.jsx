@@ -31,7 +31,6 @@ class Login extends Component {
     const token = await fetch('https://opentdb.com/api_token.php?command=request');
     const theToken = await token.json();
     this.saveInLocalStorage(theToken.token);
-    // console.log(theToken);
     return theToken.token;
   };
 
