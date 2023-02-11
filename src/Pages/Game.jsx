@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import '../App.css';
 
 const INITIAL_STATE = {
   questions: [],
-  incorrectOptions: [],
+  options: [],
   correctAnswer: [],
   questionId: 0,
   category: [],
@@ -22,33 +23,36 @@ export default class Game extends Component {
 
   getQuestions = async () => {
     const token = localStorage.getItem('token');
+    const data = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
+      .then((response) => response.json())
+      .then((conteudo) => conteudo);
     const responseFail = 3;
-    const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
-    const data = await response.json();
-    console.log(data);
-    if (data.response_code === 0) {
-      this.setState({
-        questions: data.results.map((result) => result.question),
-        incorrectOptions: data.results.map((result) => [...result.incorrect_answers]),
-        correctAnswer: data.results.map((result) => result.correct_answer),
-        category: data.results.map((result) => result.category),
-        responseAPI: true,
-      });
-    } else if (data.response_code === responseFail) {
+    if (data.response_code === responseFail) {
       const { history } = this.props;
       localStorage.removeItem('token');
       history.push('/');
     }
+    this.setState({
+      questions: data.results.map((result) => result.question),
+      options: data.results.map((result) => [
+        result.correct_answer,
+        ...result.incorrect_answers]),
+      correctAnswer: data.results.map((result) => result.correct_answer),
+      category: data.results.map((result) => result.category),
+      responseAPI: true,
+    });
   };
 
   render() {
     const {
       questions,
-      incorrectOptions,
+      options,
       correctAnswer,
       questionId,
       responseAPI,
       category } = this.state;
+    const number = 0.5;
+
     return (
       <div>
         <Header />
@@ -56,27 +60,26 @@ export default class Game extends Component {
           <h3 data-testid="question-category">{ category[questionId] }</h3>
           <h2 data-testid="question-text">{ questions[questionId] }</h2>
           {responseAPI && (
-            <ul data-testid="answer-options">
+            <div data-testid="answer-options">
               {
-                incorrectOptions[questionId]
+                options[questionId].sort(() => Math.random() - number)
                   .map((question, index) => (
-                    <li key={ question }>
-                      <button
-                        data-testid={ `wrong-answer-${index}` }
-                      >
-                        { question }
-                      </button>
-                    </li>
+                    <button
+                      key={ index }
+                      data-testid={
+                        question === correctAnswer[questionId]
+                          ? 'correct-answer'
+                          : `wrong-answer-${index - 1}`
+                      }
+                      className={ question === correctAnswer[questionId]
+                        ? 'green'
+                        : 'white' }
+                    >
+                      {question}
+                    </button>
                   ))
               }
-              <li>
-                <button
-                  data-testid="correct-answer"
-                >
-                  { correctAnswer[questionId] }
-                </button>
-              </li>
-            </ul>)}
+            </div>)}
         </form>
       </div>
     );
