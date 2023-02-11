@@ -31,7 +31,6 @@ class Login extends Component {
     const token = await fetch('https://opentdb.com/api_token.php?command=request');
     const theToken = await token.json();
     this.saveInLocalStorage(theToken.token);
-    console.log(theToken);
     return theToken.token;
   };
 
@@ -69,11 +68,11 @@ class Login extends Component {
           <button
             data-testid="btn-play"
             disabled={ isDisable }
-            onClick={ (e) => {
+            onClick={ async (e) => {
               e.preventDefault();
               dispatch(addEmail(email));
               dispatch(addName(name));
-              this.getToken();
+              await this.getToken();
               history.push('/game');
             } }
           >
