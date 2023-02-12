@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import '../styles/game.css';
+import AnswerTimer from '../components/AnswerTimer';
 
 const INITIAL_STATE = {
   questions: [],
@@ -11,6 +12,7 @@ const INITIAL_STATE = {
   category: [],
   responseAPI: false,
   color: '',
+  nextButton: false,
 };
 
 export default class Game extends Component {
@@ -73,6 +75,12 @@ export default class Game extends Component {
     }
   };
 
+  renderNextButton = () => {
+    this.setState({
+      nextButton: true,
+    });
+  };
+
   render() {
     const {
       questions,
@@ -80,7 +88,8 @@ export default class Game extends Component {
       correctAnswer,
       questionId,
       responseAPI,
-      category } = this.state;
+      category,
+      nextButton } = this.state;
     const number = 0.5;
 
     return (
@@ -88,6 +97,7 @@ export default class Game extends Component {
         <Header />
         <form>
           <h3 data-testid="question-category">{ category[questionId] }</h3>
+          {responseAPI && <AnswerTimer disabled={ nextButton } />}
           <h2 data-testid="question-text">{ questions[questionId] }</h2>
           {responseAPI && (
             <div data-testid="answer-options">
@@ -106,6 +116,7 @@ export default class Game extends Component {
                       onClick={ (e) => {
                         e.preventDefault();
                         this.changeColor(e);
+                        this.renderNextButton();
                       } }
                     >
                       {question}
@@ -113,6 +124,7 @@ export default class Game extends Component {
                   ))
               }
             </div>)}
+          {nextButton && <button data-testid="btn-next">Next</button>}
         </form>
       </div>
     );
