@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 import { ADD_EMAIL, ADD_NAME, IS_DISABLED } from '../Actions';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  isDisabled: false,
+};
 
-const exampleReducer = (state = INITIAL_STATE, action) => {
+const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EMAIL:
     return {
@@ -26,6 +28,6 @@ const exampleReducer = (state = INITIAL_STATE, action) => {
 };
 
 const rootReducer = combineReducers({
-  user: exampleReducer });
+  user: userReducer });
 
 export default rootReducer;
