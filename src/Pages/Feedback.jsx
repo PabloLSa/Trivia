@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 class Feedback extends Component {
@@ -17,6 +18,18 @@ class Feedback extends Component {
             assertions >= number ? 'Well Done!' : 'Could be better...'
           }
         </p>
+        <Link
+          to="/"
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </Link>
+        <Link
+          to="/ranking"
+          data-testid="btn-ranking"
+        >
+          Ranking
+        </Link>
       </div>
     );
   }
