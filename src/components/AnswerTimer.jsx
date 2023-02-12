@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { disableButton } from '../Redux/Actions';
+import { disableButton, timerSecondToScore } from '../Redux/Actions';
 
 class AnswerTimer extends Component {
   state = {
@@ -33,8 +33,10 @@ class AnswerTimer extends Component {
   };
 
   pauseCounter = () => {
-    const { disabled } = this.props;
+    const { disabled, dispatch } = this.props;
+    const { seconds } = this.state;
     if (disabled) {
+      dispatch(timerSecondToScore(seconds));
       clearInterval(this.interval);
     }
   };
