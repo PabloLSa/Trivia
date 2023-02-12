@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import '../styles/game.css';
 import AnswerTimer from '../components/AnswerTimer';
-import { addScore } from '../Redux/Actions';
+import { addScore, addAssertions } from '../Redux/Actions';
 
 const INITIAL_STATE = {
   questions: [],
@@ -87,7 +87,12 @@ class Game extends Component {
 
   renderNextQuestion = () => {
     const { questionId } = this.state;
+    const { history } = this.props;
     const second = 10;
+    const maxIndex = 4;
+    if (questionId === maxIndex) {
+      history.push('/feedback');
+    }
     this.setState({
       nextQuestion: true,
       questionId: questionId + 1,
@@ -104,23 +109,28 @@ class Game extends Component {
     const { correctAnswer, difficulty } = this.state;
     const { dispatch, seconds } = this.props;
     if (target.innerHTML === correctAnswer[id]) {
+      let assertion = 0;
       let counter = 0;
       const multiple = 3;
       const minimumScore = 10;
       switch (difficulty[id]) {
       case 'hard':
         counter = minimumScore + (seconds * multiple);
+        assertion += 1;
         break;
       case 'medium':
         counter = minimumScore + (seconds * 2);
+        assertion += 1;
         break;
       case 'easy':
         counter = minimumScore + (seconds * 1);
+        assertion += 1;
         break;
       default:
         break;
       }
       dispatch(addScore(counter));
+      dispatch(addAssertions(assertion));
     }
   };
 
@@ -197,6 +207,7 @@ const mapStateToProps = (state) => ({
   isDisabled: state.user.isDisabled,
   score: state.player.score,
   seconds: state.player.seconds,
+  // assertions: state.player.assertions,
 });
 
 export default connect(mapStateToProps)(Game);

@@ -3,6 +3,7 @@ export const ADD_NAME = 'ADD_NAME';
 export const IS_DISABLED = 'IS_DISABLED';
 export const ADD_SCORE = 'ADD_SCORE';
 export const ADD_SECOND_SCORE = 'ADD_SECOND_SCORE';
+export const ADD_ASSERTIONS = 'ADD_ASSERTIONS';
 
 export const addEmail = (email) => ({
   type: ADD_EMAIL,
@@ -22,6 +23,11 @@ export const addScore = (score) => ({
 export const timerSecondToScore = (seconds) => ({
   type: ADD_SECOND_SCORE,
   payload: seconds,
+});
+
+export const addAssertions = (assertions) => ({
+  type: ADD_ASSERTIONS,
+  payload: assertions,
 });
 
 export const disableButton = () => ({
