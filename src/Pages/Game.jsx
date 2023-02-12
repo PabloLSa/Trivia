@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import '../styles/game.css';
+import AnswerTimer from '../components/AnswerTimer';
 
 const INITIAL_STATE = {
   questions: [],
@@ -13,7 +15,7 @@ const INITIAL_STATE = {
   color: '',
 };
 
-export default class Game extends Component {
+class Game extends Component {
   state = {
     ...INITIAL_STATE,
   };
@@ -82,12 +84,13 @@ export default class Game extends Component {
       responseAPI,
       category } = this.state;
     const number = 0.5;
-
+    const { isDisabled } = this.props;
     return (
       <div>
         <Header />
         <form>
           <h3 data-testid="question-category">{ category[questionId] }</h3>
+          {responseAPI && <AnswerTimer />}
           <h2 data-testid="question-text">{ questions[questionId] }</h2>
           {responseAPI && (
             <div data-testid="answer-options">
@@ -107,6 +110,7 @@ export default class Game extends Component {
                         e.preventDefault();
                         this.changeColor(e);
                       } }
+                      disabled={ isDisabled }
                     >
                       {question}
                     </button>
@@ -123,4 +127,11 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }),
+  isDisabled: PropTypes.bool,
 }.isRequired;
+
+const mapStateToProps = (state) => ({
+  isDisabled: state.user.isDisabled,
+});
+
+export default connect(mapStateToProps)(Game);
