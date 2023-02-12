@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Header from '../components/Header';
 import '../styles/game.css';
 import AnswerTimer from '../components/AnswerTimer';
+import { addScore } from '../Redux/Actions';
 
 const INITIAL_STATE = {
   questions: [],
@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   correctAnswer: [],
   questionId: 0,
   category: [],
+  difficulty: [],
   responseAPI: false,
   color: '',
   nextButton: false,
@@ -42,6 +43,7 @@ class Game extends Component {
       options: data.results.map((result) => [
         result.correct_answer,
         ...result.incorrect_answers]),
+      difficulty: data.results.map((result) => result.difficulty),
       correctAnswer: data.results.map((result) => result.correct_answer),
       category: data.results.map((result) => result.category),
       responseAPI: true,
@@ -97,6 +99,31 @@ class Game extends Component {
     }, second);
   };
 
+  alteraPlacar = ({ target }) => {
+    const { id } = target;
+    const { correctAnswer, difficulty } = this.state;
+    const { dispatch, seconds } = this.props;
+    if (target.innerHTML === correctAnswer[id]) {
+      let counter = 0;
+      const multiple = 3;
+      const minimumScore = 10;
+      switch (difficulty[id]) {
+      case 'hard':
+        counter = minimumScore + (seconds * multiple);
+        break;
+      case 'medium':
+        counter = minimumScore + (seconds * 2);
+        break;
+      case 'easy':
+        counter = minimumScore + (seconds * 1);
+        break;
+      default:
+        break;
+      }
+      dispatch(addScore(counter));
+    }
+  };
+
   render() {
     const {
       questions,
@@ -134,6 +161,7 @@ class Game extends Component {
                         e.preventDefault();
                         this.changeColor(e);
                         this.renderNextButton();
+                        this.alteraPlacar(e);
                       } }
                       disabled={ isDisabled }
                     >
@@ -167,6 +195,8 @@ Game.propTypes = {
 
 const mapStateToProps = (state) => ({
   isDisabled: state.user.isDisabled,
+  score: state.player.score,
+  seconds: state.player.seconds,
 });
 
 export default connect(mapStateToProps)(Game);
