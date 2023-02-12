@@ -12,25 +12,42 @@ class AnswerTimer extends Component {
     this.timer();
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.next === true) {
+      this.resetCouter();
+      this.timer();
+    }
+  }
+
   timer = () => {
     const second = 1000;
-    return setInterval(() => {
-      this.countDown();
+    this.interval = setInterval(() => {
+      this.resumeCounter();
+      this.pauseCounter();
     }, second);
   };
 
-  countDown = () => {
+  resumeCounter = () => {
     const { seconds } = this.state;
-    if (seconds === 0) {
-      return;
-    }
     this.setState({ seconds: seconds - 1 }, this.disableButtons);
+  };
+
+  pauseCounter = () => {
+    const { disabled } = this.props;
+    if (disabled) {
+      clearInterval(this.interval);
+    }
+  };
+
+  resetCouter = () => {
+    this.setState({ seconds: 30 });
   };
 
   disableButtons = () => {
     const { dispatch } = this.props;
     const { seconds } = this.state;
     if (seconds === 0) {
+      clearInterval(this.interval);
       dispatch(disableButton());
     }
   };

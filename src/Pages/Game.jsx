@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import '../styles/game.css';
 import AnswerTimer from '../components/AnswerTimer';
@@ -13,6 +14,7 @@ const INITIAL_STATE = {
   category: [],
   responseAPI: false,
   color: '',
+  nextButton: false,
 };
 
 class Game extends Component {
@@ -75,6 +77,26 @@ class Game extends Component {
     }
   };
 
+  renderNextButton = () => {
+    this.setState({
+      nextButton: true,
+    });
+  };
+
+  renderNextQuestion = () => {
+    const { questionId } = this.state;
+    const second = 10;
+    this.setState({
+      nextQuestion: true,
+      questionId: questionId + 1,
+      color: '',
+      nextButton: false,
+    });
+    setTimeout(() => {
+      this.setState({ nextQuestion: false });
+    }, second);
+  };
+
   render() {
     const {
       questions,
@@ -82,7 +104,9 @@ class Game extends Component {
       correctAnswer,
       questionId,
       responseAPI,
-      category } = this.state;
+      category,
+      nextButton,
+      nextQuestion } = this.state;
     const number = 0.5;
     const { isDisabled } = this.props;
     return (
@@ -90,7 +114,7 @@ class Game extends Component {
         <Header />
         <form>
           <h3 data-testid="question-category">{ category[questionId] }</h3>
-          {responseAPI && <AnswerTimer />}
+          {responseAPI && <AnswerTimer disabled={ nextButton } next={ nextQuestion } />}
           <h2 data-testid="question-text">{ questions[questionId] }</h2>
           {responseAPI && (
             <div data-testid="answer-options">
@@ -109,6 +133,7 @@ class Game extends Component {
                       onClick={ (e) => {
                         e.preventDefault();
                         this.changeColor(e);
+                        this.renderNextButton();
                       } }
                       disabled={ isDisabled }
                     >
@@ -117,6 +142,16 @@ class Game extends Component {
                   ))
               }
             </div>)}
+          {nextButton && (
+            <button
+              data-testid="btn-next"
+              onClick={ (e) => {
+                e.preventDefault();
+                this.renderNextQuestion();
+              } }
+            >
+              Next
+            </button>)}
         </form>
       </div>
     );
