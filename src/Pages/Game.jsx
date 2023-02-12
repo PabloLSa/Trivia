@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import '../styles/game.css';
 import AnswerTimer from '../components/AnswerTimer';
@@ -15,7 +16,7 @@ const INITIAL_STATE = {
   nextButton: false,
 };
 
-export default class Game extends Component {
+class Game extends Component {
   state = {
     ...INITIAL_STATE,
   };
@@ -81,6 +82,20 @@ export default class Game extends Component {
     });
   };
 
+  renderNextQuestion = () => {
+    const { questionId } = this.state;
+    const second = 10;
+    this.setState({
+      nextQuestion: true,
+      questionId: questionId + 1,
+      color: '',
+      nextButton: false,
+    });
+    setTimeout(() => {
+      this.setState({ nextQuestion: false });
+    }, second);
+  };
+
   render() {
     const {
       questions,
@@ -89,15 +104,16 @@ export default class Game extends Component {
       questionId,
       responseAPI,
       category,
-      nextButton } = this.state;
+      nextButton,
+      nextQuestion } = this.state;
     const number = 0.5;
-
+    const { isDisabled } = this.props;
     return (
       <div>
         <Header />
         <form>
           <h3 data-testid="question-category">{ category[questionId] }</h3>
-          {responseAPI && <AnswerTimer disabled={ nextButton } />}
+          {responseAPI && <AnswerTimer disabled={ nextButton } next={ nextQuestion } />}
           <h2 data-testid="question-text">{ questions[questionId] }</h2>
           {responseAPI && (
             <div data-testid="answer-options">
@@ -118,13 +134,23 @@ export default class Game extends Component {
                         this.changeColor(e);
                         this.renderNextButton();
                       } }
+                      disabled={ isDisabled }
                     >
                       {question}
                     </button>
                   ))
               }
             </div>)}
-          {nextButton && <button data-testid="btn-next">Next</button>}
+          {nextButton && (
+            <button
+              data-testid="btn-next"
+              onClick={ (e) => {
+                e.preventDefault();
+                this.renderNextQuestion();
+              } }
+            >
+              Next
+            </button>)}
         </form>
       </div>
     );
@@ -135,4 +161,11 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }),
+  isDisabled: PropTypes.bool,
 }.isRequired;
+
+const mapStateToProps = (state) => ({
+  isDisabled: state.user.isDisabled,
+});
+
+export default connect(mapStateToProps)(Game);

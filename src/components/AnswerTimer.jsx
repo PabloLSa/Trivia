@@ -6,37 +6,48 @@ import { disableButton } from '../Redux/Actions';
 class AnswerTimer extends Component {
   state = {
     seconds: 30,
-    interval: '',
   };
 
   componentDidMount() {
     this.timer();
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.next === true) {
+      this.resetCouter();
+      this.timer();
+    }
+  }
+
   timer = () => {
     const second = 1000;
-    const interval = setInterval(() => {
-      this.countDown();
+    this.interval = setInterval(() => {
+      this.resumeCounter();
+      this.pauseCounter();
     }, second);
-    this.setState({ interval });
   };
 
-  countDown = () => {
-    const { seconds, interval } = this.state;
+  resumeCounter = () => {
+    const { seconds } = this.state;
+    this.setState({ seconds: seconds - 1 }, this.disableButtons);
+  };
+
+  pauseCounter = () => {
     const { disabled } = this.props;
     if (disabled) {
-      return clearInterval(interval);
+      clearInterval(this.interval);
     }
-    if (seconds === 0) {
-      return;
-    }
-    this.setState({ seconds: seconds - 1 }, this.disableButtons);
+  };
+
+  resetCouter = () => {
+    this.setState({ seconds: 30 });
   };
 
   disableButtons = () => {
     const { dispatch } = this.props;
     const { seconds } = this.state;
     if (seconds === 0) {
+      clearInterval(this.interval);
       dispatch(disableButton());
     }
   };

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ADD_EMAIL, ADD_NAME } from '../Actions';
+import { ADD_EMAIL, ADD_NAME, IS_DISABLED } from '../Actions';
 
 const INITIAL_STATE = {};
 
@@ -14,6 +14,11 @@ const exampleReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       name: action.payload,
+    };
+  case IS_DISABLED:
+    return {
+      ...state,
+      isDisabled: action.payload,
     };
   default:
     return state;
