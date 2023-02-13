@@ -57,7 +57,7 @@ class AnswerTimer extends Component {
   render() {
     const { seconds } = this.state;
     return (
-      <div>{ seconds }</div>
+      <div className="timer-content">{ seconds }</div>
     );
   }
 }

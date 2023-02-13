@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addEmail, addName } from '../Redux/Actions';
+import logo from '../trivia.png';
+import '../styles/login.css';
 
 class Login extends Component {
   state = {
@@ -42,53 +44,61 @@ class Login extends Component {
     const { email, name, isDisable } = this.state;
     const { dispatch, history } = this.props;
     return (
-      <div>
-        <form>
+      <div className="login-content">
+        <img src={ logo } className="App-logo" alt="logo" />
+        <form className="form-content">
           <label htmlFor="name">
-            Name
+            Name:
+            {' '}
             <input
               data-testid="input-player-name"
               type="text"
               id="name"
               name={ name }
               onChange={ this.handleChange }
+              className="name-input"
             />
           </label>
           <label htmlFor="email">
-            Email
+            Email:
+            {' '}
             <input
               data-testid="input-gravatar-email"
               type="email"
               name={ email }
               id="email"
               onChange={ this.handleChange }
+              className="email-input"
             />
           </label>
+          <div className="btn-inputs">
+            <button
+              data-testid="btn-play"
+              disabled={ isDisable }
+              onClick={ async (e) => {
+                e.preventDefault();
+                dispatch(addEmail(email));
+                dispatch(addName(name));
+                await this.getToken();
+                history.push('/game');
+              } }
+              className="play-btn"
+            >
+              Play
 
-          <button
-            data-testid="btn-play"
-            disabled={ isDisable }
-            onClick={ async (e) => {
-              e.preventDefault();
-              dispatch(addEmail(email));
-              dispatch(addName(name));
-              await this.getToken();
-              history.push('/game');
-            } }
-          >
-            Play
+            </button>
+            <button
+              type="button"
+              data-testid="btn-settings"
+              onClick={ () => {
+                history.push('/config');
+              } }
+              className="config-btn"
+            >
+              Configurações
 
-          </button>
-          <button
-            type="button"
-            data-testid="btn-settings"
-            onClick={ () => {
-              history.push('/config');
-            } }
-          >
-            Configurações
-
-          </button>
+            </button>
+          </div>
         </form>
 
       </div>

@@ -40,9 +40,12 @@ class Game extends Component {
     }
     this.setState({
       questions: data.results.map((result) => result.question),
-      options: data.results.map((result) => [
-        result.correct_answer,
-        ...result.incorrect_answers]),
+      options: data.results.map((result) => {
+        const number = 0.5;
+        return [
+          result.correct_answer,
+          ...result.incorrect_answers].sort(() => Math.random() - number);
+      }),
       difficulty: data.results.map((result) => result.difficulty),
       correctAnswer: data.results.map((result) => result.correct_answer),
       category: data.results.map((result) => result.category),
@@ -144,19 +147,27 @@ class Game extends Component {
       category,
       nextButton,
       nextQuestion } = this.state;
-    const number = 0.5;
     const { isDisabled } = this.props;
     return (
-      <div>
+      <div className="game-content">
         <Header />
-        <form>
-          <h3 data-testid="question-category">{ category[questionId] }</h3>
+        <form className="form-content">
+          <h3
+            data-testid="question-category"
+          >
+            { category[questionId] }
+          </h3>
           {responseAPI && <AnswerTimer disabled={ nextButton } next={ nextQuestion } />}
-          <h2 data-testid="question-text">{ questions[questionId] }</h2>
+          <h2
+            data-testid="question-text"
+            className="question-input"
+          >
+            { questions[questionId] }
+          </h2>
           {responseAPI && (
-            <div data-testid="answer-options">
+            <div data-testid="answer-options" className="answers">
               {
-                options[questionId].sort(() => Math.random() - number)
+                options[questionId]
                   .map((question, index) => (
                     <button
                       key={ index }
@@ -166,7 +177,8 @@ class Game extends Component {
                           : `wrong-answer-${index - 1}`
                       }
                       id={ questionId }
-                      className={ this.teste(question === correctAnswer[questionId]) }
+                      className={ `answers-btn ${
+                        this.teste(question === correctAnswer[questionId])}` }
                       onClick={ (e) => {
                         e.preventDefault();
                         this.changeColor(e);
@@ -187,6 +199,7 @@ class Game extends Component {
                 e.preventDefault();
                 this.renderNextQuestion();
               } }
+              className="next-btn"
             >
               Next
             </button>)}
@@ -207,7 +220,6 @@ const mapStateToProps = (state) => ({
   isDisabled: state.user.isDisabled,
   score: state.player.score,
   seconds: state.player.seconds,
-  // assertions: state.player.assertions,
 });
 
 export default connect(mapStateToProps)(Game);
