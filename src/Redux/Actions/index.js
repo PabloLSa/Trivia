@@ -15,9 +15,10 @@ export const addName = (name) => ({
   payload: name,
 });
 
-export const addScore = (score) => ({
+export const addScore = (score, reset = false) => ({
   type: ADD_SCORE,
   payload: score,
+  reset,
 });
 
 export const timerSecondToScore = (seconds) => ({

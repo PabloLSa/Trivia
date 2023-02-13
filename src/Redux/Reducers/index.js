@@ -43,7 +43,7 @@ const playerReducer = (state = INITIAL_PLAYER_STATE, action) => {
   case ADD_SCORE:
     return {
       ...state,
-      score: state.score + action.payload,
+      score: action.reset ? 0 : state.score + action.payload,
     };
   case ADD_SECOND_SCORE:
     return {

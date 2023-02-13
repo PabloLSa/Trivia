@@ -88,7 +88,7 @@ class Game extends Component {
   renderNextQuestion = () => {
     const { questionId } = this.state;
     const { history } = this.props;
-    const second = 10;
+    const magicNumber = 10;
     const maxIndex = 4;
     if (questionId === maxIndex) {
       history.push('/feedback');
@@ -101,7 +101,7 @@ class Game extends Component {
     });
     setTimeout(() => {
       this.setState({ nextQuestion: false });
-    }, second);
+    }, magicNumber);
   };
 
   alteraPlacar = ({ target }) => {
