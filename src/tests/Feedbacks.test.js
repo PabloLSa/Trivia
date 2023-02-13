@@ -30,7 +30,6 @@ describe('Teste do componente Feedback.js', () => {
 
   });
   
-  
   it('deve permitir que o usuário jogue novamente ao clicar no botão "Play Again"', async() => {
     const { history } = renderWithRouterAndRedux(<App />);
     act(() => {
