@@ -6,52 +6,52 @@ import Feedback from '../Pages/Feedback';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 
-describe('Testes do componente Feedback.js', () => {
-  it('Deve renderizar os componentes corretamente', () => {
+describe('Teste do componente Feedback.js', () => {
+  it('deve renderizar os componentes corretamente', () => {
     const { history } = renderWithRouterAndRedux(<Feedback />);
-    const headerText = screen.getByTestId('header-player-name');
-    const feedbackText = screen.getByTestId('feedback-text');
+    const header = screen.getByTestId('header-player-name');
+    const feedback = screen.getByTestId('feedback-text');
 
-    expect(feedbackText).toHaveTextContent('Could be better...');
-    expect(headerText).toBeInTheDocument();
-    expect(feedbackText).toBeInTheDocument();
+    expect(feedback).toHaveTextContent('Could be better...');
+    expect(header).toBeInTheDocument();
+    expect(feedback).toBeInTheDocument();
   });
   
-  it('Deve exibir a mensagem "Well Done!" em caso de muitos acertos', async () => {
+  it('deve exibir a mensagem "Well Done!" em caso de muitos acertos', async () => {
     const { store, history } = renderWithRouterAndRedux(<App />);
     store.getState().player.assertions = 5;
     act(() => {
       history.push('/feedback');
     })
     await waitFor(() => {
-      const feedbackText = screen.getByTestId('feedback-text');
-      expect(feedbackText).toHaveTextContent('Well Done!');
+      const feedback = screen.getByTestId('feedback-text');
+      expect(feedback).toHaveTextContent('Well Done!');
     }, 2000);
 
   });
   
-  it('Deve permitir que o usuário jogue novamente ao clicar no botão "Play Again"', async() => {
+  it('deve permitir que o usuário jogue novamente ao clicar no botão "Play Again"', async() => {
     const { history } = renderWithRouterAndRedux(<App />);
     act(() => {
       history.push('/feedback');
     });
     expect(history.location.pathname).toBe('/feedback')
     await waitFor(() => {
-      const playAgainBtn = screen.getByTestId('btn-play-again');
-      userEvent.click(playAgainBtn);
+      const playAgainButton = screen.getByTestId('btn-play-again');
+      userEvent.click(playAgainButton);
       expect(history.location.pathname).toBe('/')
     }, 2000);
   })
   
-  it('Deve redirecionar o usuário para a página de ranking ao clicar no botão "Ranking"', async() => {
+  it('deve redirecionar o usuário para a página de ranking ao clicar no botão "Ranking"', async() => {
     const { history } = renderWithRouterAndRedux(<App />);
     act(() => {
       history.push('/feedback');
     });
     expect(history.location.pathname).toBe('/feedback')
     await waitFor(() => {
-      const playAgainBtn = screen.getByTestId('btn-ranking');
-      userEvent.click(playAgainBtn);
+      const rankingButton = screen.getByTestId('btn-ranking');
+      userEvent.click(rankingButton);
       expect(history.location.pathname).toBe('/ranking')
     }, 2000);
   })
