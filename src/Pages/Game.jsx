@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import * as sanitizeHtml from 'sanitize-html';
 import Header from '../components/Header';
 import '../styles/game.css';
 import AnswerTimer from '../components/AnswerTimer';
@@ -148,6 +149,7 @@ class Game extends Component {
       nextButton,
       nextQuestion } = this.state;
     const { isDisabled } = this.props;
+    const clean = sanitizeHtml(questions[questionId]);
     return (
       <div className="game-content">
         <Header />
@@ -161,35 +163,37 @@ class Game extends Component {
           <h2
             data-testid="question-text"
             className="question-input"
-          >
-            { questions[questionId] }
-          </h2>
+            dangerouslySetInnerHTML={ { __html: clean } }
+          />
           {responseAPI && (
             <div data-testid="answer-options" className="answers">
               {
                 options[questionId]
-                  .map((question, index) => (
-                    <button
-                      key={ index }
-                      data-testid={
-                        question === correctAnswer[questionId]
-                          ? 'correct-answer'
-                          : `wrong-answer-${index - 1}`
-                      }
-                      id={ questionId }
-                      className={ `answers-btn ${
-                        this.teste(question === correctAnswer[questionId])}` }
-                      onClick={ (e) => {
-                        e.preventDefault();
-                        this.changeColor(e);
-                        this.renderNextButton();
-                        this.alteraPlacar(e);
-                      } }
-                      disabled={ isDisabled }
-                    >
-                      {question}
-                    </button>
-                  ))
+                  .map((question, index) => {
+                    const questionCleaned = sanitizeHtml(question);
+                    return (
+                      <button
+                        key={ index }
+                        data-testid={
+                          question === correctAnswer[questionId]
+                            ? 'correct-answer'
+                            : `wrong-answer-${index - 1}`
+                        }
+                        id={ questionId }
+                        className={ `answers-btn ${
+                          this.teste(question === correctAnswer[questionId])}` }
+                        onClick={ (e) => {
+                          e.preventDefault();
+                          this.changeColor(e);
+                          this.renderNextButton();
+                          this.alteraPlacar(e);
+                        } }
+                        disabled={ isDisabled }
+                        aria-label="questions"
+                        dangerouslySetInnerHTML={ { __html: questionCleaned } }
+                      />
+                    );
+                  })
               }
             </div>)}
           {nextButton && (

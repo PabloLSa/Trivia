@@ -25,29 +25,52 @@ body {
   padding: 10px;
 }
 
-.name-input {
+input {
   border: 2px solid black;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 8px 0;
   margin-bottom: 20px;
+  padding: 12px 20px;
+  width: 20%;
 }
 
-.email-input {
-  border: 2px solid black;
-  margin-bottom: 20px;
+label {
+  font-size: large;
+  font-weight: 600;
 }
 
 .play-btn {
+  background-color: #1b2f31;
+  border-radius: 50px;
+  color: #1cc49d;
+  cursor: pointer;
+  font-size: large;
+  font-weight: 600;
+  height: 3em;
   margin: 10px;
-  max-width: 3%;
+  width: 5em;
+}
+
+.play-btn:disabled {
+  background-color: rgb(124, 124, 129);
+  color: #1a181875;
 }
 
 .config-btn {
-  max-width: 8%;
+  background-color: #1b2f31;
+  border-radius: 50px;
+  color: #1cc49d;
+  cursor: pointer;
+  font-size: large;
+  font-weight: 600;
+  height: 3em;
+  width: 8em;
 }
 
 .btn-inputs button {
   border: 2px solid black;
-  border-radius: 10%;
-  padding: 4px;
 }
 
 @media ( prefers-reduced-motion : no-preference ) {

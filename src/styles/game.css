@@ -53,6 +53,7 @@
 
 .answers button:disabled {
   background-color: rgb(99, 15, 15);
+  cursor: not-allowed;
 }
 
 @keyframes flash {

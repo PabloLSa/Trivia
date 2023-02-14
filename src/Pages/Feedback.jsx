@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import md5 from 'crypto-js/md5';
 import Header from '../components/Header';
-import { addScore } from '../Redux/Actions';
+import { addScore, addAssertions } from '../Redux/Actions';
+import '../styles/feedback.css';
 
 class Feedback extends Component {
   componentWillUnmount() {
@@ -22,6 +23,7 @@ class Feedback extends Component {
         .stringify([...JSON.parse(rankingInfo), ...ranking]));
     }
     dispatch(addScore(0, true));
+    dispatch(addAssertions(0, true));
   }
 
   render() {
@@ -30,25 +32,29 @@ class Feedback extends Component {
     return (
       <div>
         <Header />
-        <h1 data-testid="feedback-total-score">{ score }</h1>
-        <h2 data-testid="feedback-total-question">{ assertions }</h2>
-        <p data-testid="feedback-text">
-          {
-            assertions >= number ? 'Well Done!' : 'Could be better...'
-          }
-        </p>
-        <Link
-          to="/"
-          data-testid="btn-play-again"
-        >
-          Play Again
-        </Link>
-        <Link
-          to="/ranking"
-          data-testid="btn-ranking"
-        >
-          Ranking
-        </Link>
+        <div className="feedback-content">
+          <h1 data-testid="feedback-total-score">{ `Score: ${score}` }</h1>
+          <h2 data-testid="feedback-total-question">{ `Assertions: ${assertions}` }</h2>
+          <p data-testid="feedback-text">
+            {
+              assertions >= number ? 'Well Done!' : 'Could be better...'
+            }
+          </p>
+          <Link
+            to="/"
+            data-testid="btn-play-again"
+            className="btn-again"
+          >
+            Play Again
+          </Link>
+          <Link
+            to="/ranking"
+            data-testid="btn-ranking"
+            className="btn-ranking"
+          >
+            Ranking
+          </Link>
+        </div>
       </div>
     );
   }

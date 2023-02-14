@@ -26,9 +26,10 @@ export const timerSecondToScore = (seconds) => ({
   payload: seconds,
 });
 
-export const addAssertions = (assertions) => ({
+export const addAssertions = (assertions, reset = false) => ({
   type: ADD_ASSERTIONS,
   payload: assertions,
+  reset,
 });
 
 export const disableButton = () => ({
