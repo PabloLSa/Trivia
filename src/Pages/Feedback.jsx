@@ -33,8 +33,18 @@ class Feedback extends Component {
       <div>
         <Header />
         <div className="feedback-content">
-          <h1 data-testid="feedback-total-score">{ `Score: ${score}` }</h1>
-          <h2 data-testid="feedback-total-question">{ `Assertions: ${assertions}` }</h2>
+          <div>
+            <label>
+              Score:
+              <h1 data-testid="feedback-total-score">{ score }</h1>
+            </label>
+          </div>
+          <div>
+            <label>
+              Assertions:
+              <h2 data-testid="feedback-total-question">{ assertions }</h2>
+            </label>
+          </div>
           <p data-testid="feedback-text">
             {
               assertions >= number ? 'Well Done!' : 'Could be better...'
