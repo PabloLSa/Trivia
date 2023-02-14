@@ -8,19 +8,6 @@
   min-height: 90vh;
 }
 
-h1 {
-  font-family: Verdana , Geneva , Tahoma , sans-serif;
-  font-size: 4em;
-  font-weight: 600;
-
-}
-
-h2 {
-  font-family: monospace;
-  font-size: 3em;
-  font-weight: 600;
-}
-
 p {
   font-family: monospace;
   font-size: larger;
@@ -59,4 +46,12 @@ p {
   margin: 10px;
   text-decoration: none;
   width: 8em;
+}
+
+label {
+  align-items: center;
+  display: flex;
+  font-family: monospace;
+  font-size: 3em;
+  justify-content: center;
 }
